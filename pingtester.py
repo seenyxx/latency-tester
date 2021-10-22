@@ -1,13 +1,23 @@
 from ping3 import ping
 from statistics import mean
 from math import floor
+from re import match
 
 # 1.1.1.1 (Cloudflare), Google DNS, Quad9 DNS, OpenDNS
 dns_list = ["1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4", "9.9.9.9", "149.112.112.112", "208.67.222.222", "208.67.220.220"]
 pings = []
 max_pings = []
 min_pings = []
-ping_count = 64
+ping_count = 128
+
+pings_per_address = input("How many pings do you wish to do per DNS server? (Higher number = more accurate results) [128]").strip()
+
+if match("^[0-9]+$", pings_per_address):
+    print("Pings per address set to", pings_per_address)
+    ping_count = int(pings_per_address)
+else:
+    print("Pings per address set to 128")
+    ping_count = 128
 
 
 
@@ -18,6 +28,7 @@ print("Testing your list of DNS servers now...")
 
 for dns in dns_list:
     latency = []
+    print("Testing", dns)
     for i in range(ping_count):
         latency.append(ping(dns) * 1000)
     pings.append(reduce_latency_size(mean(latency)))
