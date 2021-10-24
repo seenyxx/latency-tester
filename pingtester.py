@@ -1,4 +1,3 @@
-import re
 import socket
 from ping3 import ping
 from statistics import mean
